@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+// You can add global styles to this file, and also import other style files.
+
+// Definitions here are not restricted by Angular's View Encapsulation,
+// but definitions under the ./app/ directory are.
+
+@import 'variables'; // <- importing our partial file _variables.scss
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+table.align-center > tbody > tr {
+  & > td, & > th {
+    vertical-align: middle;
+  }
+}
+
+button {
+  cursor: pointer;
+}

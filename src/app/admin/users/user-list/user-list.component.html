@@ -1,0 +1,29 @@
+<table class="table table-hover align-center">
+  <thead class="thead-default">
+    <tr>
+      <th class="text-center">ID</th>
+      <th>Name</th>
+      <th>E-mail</th>
+      <th>Birthdate</th>
+      <th class="text-center">Admin</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th class="text-center">1</th>
+      <td>John Doe</td>
+      <td>john@example.com</td>
+      <td>06/30/1999</td>
+      <td class="text-center">
+        yes
+      </td>
+      <td class="text-right">
+        <button type="button" class="btn btn-outline-primary" [routerLink]="['1']">✏️</button>
+        <button type="button" class="btn btn-outline-danger">❌</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<button type="button" class="btn btn-primary" [routerLink]="['new']"> Add New </button>

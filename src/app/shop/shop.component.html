@@ -1,0 +1,88 @@
+<p>I want an alert here after the user clicks on "Buy".</p>
+
+<div class="row">
+  <div class="col">
+    <div class="row">
+      <div class="col-sm col-md-6 p-0 card">
+        <div class="card-block">
+          <h6 class="card-title">Product 1</h6>
+          <p class="card-text">
+            This is the description of the product 1.
+          </p>
+        </div>
+        <div class="card-footer form-inline justify-content-end flex-nowrap">
+          <p class="form-control-static text-nowrap" title="Unit Price"> $ 1.50 &times; </p>
+          <input class="form-control w-25 mx-1" type="number" value="1" step="1" [min]="1" [max]="10" title="Quantity" />
+          <button type="button" class="btn btn-outline-primary"> Add </button>
+        </div>
+      </div>
+      <div class="col-sm col-md-6 p-0 card">
+        <div class="card-block">
+          <h6 class="card-title">Product 2</h6>
+          <p class="card-text">
+            This is the description of the product 2.
+          </p>
+        </div>
+        <div class="card-footer form-inline justify-content-end flex-nowrap">
+          <p class="form-control-static text-nowrap" title="Unit Price"> $ 0.30 &times; </p>
+          <input class="form-control w-25 mx-1" type="number" value="1" step="1" [min]="1" [max]="10" title="Quantity" />
+          <button type="button" class="btn btn-outline-primary"> Add </button>
+        </div>
+      </div>
+      <div class="col-sm col-md-6 p-0 card">
+        <div class="card-block">
+          <h6 class="card-title">Product 3</h6>
+          <p class="card-text">
+            This is the description of the product 3.
+          </p>
+        </div>
+        <div class="card-footer form-inline justify-content-end flex-nowrap">
+          <p class="form-control-static text-nowrap" title="Unit Price"> $ 1.25 &times; </p>
+          <input class="form-control w-25 mx-1" type="number" value="1" step="1" [min]="1" [max]="10" title="Quantity" />
+          <button type="button" class="btn btn-outline-primary"> Add </button>
+        </div>
+      </div>
+      <div class="col-sm col-md-6 p-0 card">
+        <div class="card-block">
+          <h6 class="card-title">Product 4</h6>
+          <p class="card-text">
+            This is the description of the product 4.
+          </p>
+        </div>
+        <div class="card-footer form-inline justify-content-end flex-nowrap">
+          <p class="form-control-static text-nowrap" title="Unit Price"> $ 0.80 &times; </p>
+          <input class="form-control w-25 mx-1" type="number" value="1" step="1" [min]="1" [max]="10" title="Quantity" />
+          <button type="button" class="btn btn-outline-primary"> Add </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-3">
+    <ul class="list-group small">
+      <li class="list-group-item p-2 justify-content-center">
+        <h5> 🛒 </h5>
+      </li>
+      <li class="list-group-item p-2 justify-content-between">
+        Product 1
+        <span>
+          $ 1.50 &times;
+          <span class="badge badge-info"> 2 </span>
+        </span>
+      </li>
+      <li class="list-group-item p-2 justify-content-between">
+        Product 2
+        <span>
+          $ 0.30 &times;
+          <span class="badge badge-info"> 3 </span>
+        </span>
+      </li>
+      <li class="list-group-item p-2 justify-content-end">
+        <strong> Total: &nbsp; </strong> $ 3.90
+      </li>
+      <li class="list-group-item p-2 justify-content-end">
+        <button type="button" class="btn btn-primary"> Buy </button>
+      </li>
+    </ul>
+  </div>
+</div>

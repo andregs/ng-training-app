@@ -1,0 +1,8 @@
+// Use this file to define/override vars & mixins.
+
+// The leading underscore on the filename lets Sass know that this file is
+// only a partial file and that it should not be generated into a CSS file.
+
+// Partials get merged on compilation when you use @import (see styles.scss)
+
+$card-border-radius: 0;
