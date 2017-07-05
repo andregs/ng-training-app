@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { User } from '../entity/customer.1';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'mc-login',
@@ -7,9 +11,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  users: User[];
+
+  constructor(
+    private service: LoginService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+    // empty
+  }
 
   ngOnInit() {
+    this.route.data.subscribe(
+      data => this.users = data.users,
+    );
+  }
+
+  login(user: User) {
+    this.service.login(user).subscribe(
+      () => {
+        console.log('Authenticated:', user);
+        this.router.navigate(['shop']);
+      },
+    );
   }
 
 }

@@ -11,6 +11,15 @@ export class User {
   constructor(data?: Partial<User>) {
     Object.assign(this, data);
   }
+
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  set fullName(name: string) {
+    [this.firstName, this.lastName] = name.split(' ');
+  }
+
 }
 
 export class Product {

@@ -9,4 +9,6 @@ Admin
   <li><a [routerLink]="['/admin/products']"> Products </a></li>
 </ul>
 
-<a href="#"> Bye, John. </a>
+<a *ngIf="authenticated" href="login" (click)="!!logout()">
+  Bye, {{ authenticated!.firstName }}.
+</a>

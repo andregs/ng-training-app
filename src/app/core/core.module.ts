@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { MenuComponent } from './menu/menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { ErrorComponent } from './error/error.component';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   imports: [
@@ -18,7 +19,9 @@ import { ErrorComponent } from './error/error.component';
   ],
 
   // your own root-level singletons here
-  providers: [],
+  providers: [
+    AuthGuard,
+  ],
 
   // declarations required by app.component.html
   declarations: [
