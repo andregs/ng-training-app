@@ -2,10 +2,12 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
 
 import { MenuComponent } from './menu/menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { ErrorComponent } from './error/error.component';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   imports: [
@@ -15,10 +17,13 @@ import { ErrorComponent } from './error/error.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
+    Ng2BootstrapModule.forRoot(),
   ],
 
   // your own root-level singletons here
-  providers: [],
+  providers: [
+    AuthGuard,
+  ],
 
   // declarations required by app.component.html
   declarations: [

@@ -1,13 +1,18 @@
 <h5 class="mt-3"> Product Management </h5>
 <p>Create, edit or delete products & categories by using the following controls.</p>
 
-<form class="form-inline mb-4">
-  <input type="text" class="form-control mx-1" value="Games"placeholder="Category Name" title="Category Name">
+<form class="form-inline mb-4" name="categoryForm" #categoryForm="ngForm">
+  <input id="categoryName" name="categoryName" #categoryName="ngModel"
+    type="text" required [maxlength]="256"
+    class="form-control mx-1"
+    [(ngModel)]="category.name"
+    placeholder="Category Name"
+  />
   <button type="button" title="New" class="btn btn-outline-primary mr-1">➕</button>
   <button type="button" title="Remove" class="btn btn-outline-danger">❌</button>
 </form>
 
-<form>
+<form name="productForm" #productForm="ngForm" ngNativeValidate>
 
   <table class="table table-hover align-center">
     <thead class="thead-default">
@@ -21,12 +26,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th class="text-center">1</th>
-        <td>Games</td>
-        <td>Red Dead Redemption</td>
-        <td>red</td>
-        <td>$ 25.50</td>
+      <tr *ngFor="let product of category.products">
+        <th class="text-center"> {{ product.id }} </th>
+        <td> {{ category.name }} </td>
+        <td> {{ product.name }} </td>
+        <td> {{ product.color }} </td>
+        <td> {{ product.price | currency:'USD':true }} </td>
         <td>
           <button type="button" title="Edit" class="btn btn-outline-primary">✏️</button>
           <button type="button" title="Remove" class="btn btn-outline-danger">❌</button>
@@ -35,22 +40,42 @@
       <tr>
         <th></th>
         <td>
-          <select id="category" name="category" class="form-control">
-            <option>Games</option>
-            <option>Books</option>
+          <select id="category" name="category" #categoryList="ngModel"
+            *ngIf="newProduct.id"
+            required
+            class="form-control"
+            [(ngModel)]="newProduct.categoryId"
+          >
+            <option *ngFor="let c of categories" [value]="c.id"> {{ c.name }} </option>
           </select>
         </td>
-        <td>
-          <input type="text" id="name" name="name" class="form-control" placeholder="Product Name" title="Product Name">
+        <td [ngClass]="validationClasses(name)">
+          <input id="name" name="name" #name="ngModel"
+            type="text" required [maxlength]="256"
+            class="form-control form-control-danger form-control-success"
+            placeholder="Product Name"
+            [(ngModel)]="newProduct.name"
+          />
         </td>
-        <td>
-          <select id="color" name="color" class="form-control">
-            <option>red</option>
-            <option>green</option>
+        <td [ngClass]="validationClasses(color)">
+          <select id="color" name="color" #color="ngModel"
+            required
+            class="form-control form-control-danger form-control-success"
+            [(ngModel)]="newProduct.color"
+          >
+            <option *ngFor="let c of colors" [value]="c"> {{ c }} </option>
           </select>
         </td>
-        <td>
-          <input type="number" id="price" name="price" class="form-control" placeholder="0.00" title="Product Price" [min]="0.10" [step]="0.10">
+        <td [ngClass]="validationClasses(price)">
+          <input id="price" name="price" #price="ngModel"
+            type="number" required
+            class="form-control form-control-danger form-control-success"
+            placeholder="0.00"
+            [min]="0.1"
+            [max]="999999.99"
+            [step]="0.1"
+            [(ngModel)]="newProduct.price"
+          />
         </td>
         <td>
           <button type="submit" title="Add" class="btn btn-primary">Add</button>
@@ -60,3 +85,13 @@
   </table>
 
 </form>
+
+<pre>
+Category: {{ { id: category.id, name: category.name } | json }}
+New Product: {{ newProduct | json }}
+Product Form.dirty: {{ productForm.dirty | json }}
+Product Form.submitted: {{ productForm.submitted | json }}
+Product Form.touched: {{ productForm.touched | json }}
+Product Form.valid: {{ productForm.valid | json }}
+Product Form.value: {{ productForm.value | json }}
+</pre>

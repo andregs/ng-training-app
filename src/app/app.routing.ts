@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: '**',
     component: ErrorComponent,
-    data: { kind: '404' },
+    data: { kind: 'not-found' },
   },
 ];
 

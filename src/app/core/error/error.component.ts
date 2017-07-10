@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'mc-error',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorComponent implements OnInit {
 
-  constructor() { }
+  kind: string;
+
+  constructor(
+    private route: ActivatedRoute,
+  ) {
+    // empty
+  }
 
   ngOnInit() {
+    this.route.data.subscribe(
+      data => this.kind = data.kind,
+    );
   }
 
 }

@@ -10,20 +10,30 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th class="text-center">1</th>
-      <td>John Doe</td>
-      <td>john@example.com</td>
-      <td>06/30/1999</td>
+    <tr *ngFor="let user of users">
+      <th class="text-center"> {{ user.id }} </th>
+      <td> {{ user.fullName }} </td>
+      <td> {{ user.email }} </td>
+      <td> {{ user.birthdate | date }} </td>
       <td class="text-center">
-        yes
+        {{ user.admin ? 'yes' : 'no' }}
       </td>
       <td class="text-right">
-        <button type="button" class="btn btn-outline-primary" [routerLink]="['1']">✏️</button>
-        <button type="button" class="btn btn-outline-danger">❌</button>
+        <button type="button"
+          class="btn btn-outline-primary"
+          [routerLink]="[user.id]"
+        >✏️</button>
+        <button type="button"
+          *ngIf="! user.authenticated"
+          class="btn btn-outline-danger"
+          (click)="delete(user)"
+        >❌</button>
       </td>
     </tr>
   </tbody>
 </table>
 
-<button type="button" class="btn btn-primary" [routerLink]="['new']"> Add New </button>
+<button type="button"
+  class="btn btn-primary"
+  [routerLink]="['new']"
+> Add New </button>
