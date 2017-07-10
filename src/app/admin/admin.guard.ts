@@ -13,17 +13,19 @@ export class AdminGuard implements CanActivate {
   }
 
   canActivate() {
-    const isOk = !!this.service.authenticated && this.service.authenticated.admin;
-    if (isOk) {
-      console.log('Ok, user is authorized.');
-      return true;
-    } else {
-      console.log('You shall not pass!');
-      this.service.logout().subscribe(
-        () => this.router.navigate(['/login']),
-      );
-      return false;
-    }
+    return this.service.getProfile()
+      .map(user => {
+        if (user && user.admin) {
+          console.log('Ok, user is authorized.');
+          return true;
+        } else {
+          console.log('You shall not pass!');
+          this.service.logout().subscribe(
+            () => this.router.navigate(['/login']),
+          );
+          return false;
+        }
+      });
   }
 
 }

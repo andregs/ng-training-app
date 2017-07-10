@@ -1,42 +1,91 @@
-<form class="w-75">
+<form class="w-75" name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit()">
 
   <div class="form-group row">
     <label for="userId" class="col-2 col-form-label"> ID </label>
     <div class="col-10"></div>
     <div class="col-2">
-      <input type="text" class="form-control" id="userId" disabled />
+      <input id="userId" name="userId" #userId="ngModel"
+        type="text"
+        class="form-control"
+        [(ngModel)]="user.id"
+        readonly
+      />
     </div>
     <div class="col-10 form-check">
       <label class="form-check-label col-form-label">
-        <input type="checkbox" class="form-check-input" id="admin" />
+        <input id="admin" name="admin" #admin="ngModel"
+          type="checkbox"
+          class="form-check-input"
+          [disabled]="user.authenticated"
+          [(ngModel)]="user.admin"
+        />
         User is a system administrator
       </label>
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="validationClasses(email)">
     <label for="email"> E-mail </label>
-    <input type="email" class="form-control" id="email" placeholder="E-mail" />
+    <input id="email" name="email" #email="ngModel"
+      type="email" required email [maxlength]="256"
+      class="form-control form-control-danger form-control-success"
+      placeholder="E-mail"
+      [(ngModel)]="user.email"
+    />
+    <div class="form-control-feedback" *ngIf="email.dirty && email.invalid">
+      Please inform a valid e-mail address.
+    </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="validationClasses(firstName)">
     <label for="firstName"> First Name </label>
-    <input type="text" class="form-control" id="firstName" placeholder="First Name" />
+    <input id="firstName" name="firstName" #firstName="ngModel"
+      type="text" required [minlength]="2" [maxlength]="256"
+      class="form-control form-control-danger form-control-success"
+      placeholder="First Name"
+      [(ngModel)]="user.firstName"
+    />
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="validationClasses(lastName)">
     <label for="lastName"> Last Name </label>
-    <input type="text" class="form-control" id="lastName" placeholder="Last Name" />
+    <input id="lastName" name="lastName" #lastName="ngModel"
+      type="text"
+      class="form-control form-control-danger form-control-success"
+      placeholder="First Name"
+      [(ngModel)]="user.lastName"
+    />
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="validationClasses(birthdate)">
     <label for="birthdate"> Birthdate </label>
-    <input type="date" class="form-control" id="birthdate" placeholder="Birthdate" />
+    <input id="birthdate" name="birthDate" #birthdate="ngModel"
+      type="date" required
+      class="form-control form-control-danger form-control-success"
+      placeholder="Birthdate"
+      [(ngModel)]="user.birthdateYMD"
+    />
   </div>
 
   <div class="form-group text-right">
-    <button type="submit" class="btn btn-primary"> Submit </button>
-    <button type="button" class="btn btn-secondary" [routerLink]="['../']" > Cancel </button>
+    <button type="submit"
+      [disabled]="userForm.invalid"
+      class="btn btn-primary"
+    > Submit </button>
+
+    <button type="button"
+      class="btn btn-secondary"
+      [routerLink]="['../']"
+    > Cancel </button>
   </div>
 
 </form>
+
+<pre>
+User: {{ user | json }}
+Form.dirty: {{ userForm.dirty | json }}
+Form.submitted: {{ userForm.submitted | json }}
+Form.touched: {{ userForm.touched | json }}
+Form.valid: {{ userForm.valid | json }}
+Form.value: {{ userForm.value | json }}
+</pre>

@@ -6,7 +6,9 @@
 Admin
 <ul class="list-unstyled">
   <li><a [routerLink]="['/admin/users']"> Users </a></li>
-  <li><a [routerLink]="['/admin/products']"> Products </a></li>
+  <li *ngFor="let c of categories">
+    <a [routerLink]="['admin', 'products', c.id]"> {{ c.name }} </a>
+  </li>
 </ul>
 
 <a *ngIf="authenticated" href="login" (click)="!!logout()">

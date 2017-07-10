@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
 
-import { LoginService } from './login.service';
-import { User } from '../entity/customer.1';
+
+import { User } from '../../entity/model';
+import { UserService } from './user.service';
 
 @Injectable()
 export class UserListResolver implements Resolve<User[]> {
 
   constructor(
-    private service: LoginService,
+    private service: UserService,
   ) {
     // empty
   }

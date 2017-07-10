@@ -2,6 +2,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
 
 import { MenuComponent } from './menu/menu.component';
 import { SharedModule } from '../shared/shared.module';
@@ -16,6 +17,7 @@ import { AuthGuard } from './auth.guard';
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
+    Ng2BootstrapModule.forRoot(),
   ],
 
   // your own root-level singletons here

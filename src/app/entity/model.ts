@@ -5,8 +5,9 @@ export class User {
   @a email: string;
   @a firstName: string;
   @a lastName: string;
-  @aas(Date) birthdate: Date;
+  @aas(Date) birthdate: Date | null;
   @a admin = false;
+  @a authenticated: boolean;
 
   constructor(data?: Partial<User>) {
     Object.assign(this, data);
@@ -16,8 +17,19 @@ export class User {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  set fullName(name: string) {
-    [this.firstName, this.lastName] = name.split(' ');
+  /**
+   * HTML5 `input[type=date]` works with a string in the `yyyy-MM-dd` format.
+   * Angular isn't able to bind a `Date` value yet.
+   * @see https://github.com/angular/angular/issues/8203
+   */
+  get birthdateYMD() {
+    if (! this.birthdate) return '';
+    return this.birthdate.toISOString().slice(0, 10);
+  }
+
+  set birthdateYMD(birthdate: string) {
+    // The field gives us '' when the user types an invalid date
+    this.birthdate = birthdate ? new Date(birthdate) : null;
   }
 
 }

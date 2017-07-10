@@ -6,10 +6,14 @@ import { ProductsComponent } from './products/products.component';
 import { AdminRoutingModule } from './admin.routing';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserFormComponent } from './users/user-form/user-form.component';
-import { AdminGuard } from './admin.guard';
+import { UserService } from './users/user.service';
+import { SharedModule } from '../shared/shared.module';
+import { ProductService } from './products/product.service';
+
 
 @NgModule({
   imports: [
+    SharedModule,
     AdminRoutingModule,
   ],
   declarations: [
@@ -20,7 +24,8 @@ import { AdminGuard } from './admin.guard';
     UserListComponent,
   ],
   providers: [
-    AdminGuard,
+    UserService,
+    ProductService,
   ]
 })
 export class AdminModule { }

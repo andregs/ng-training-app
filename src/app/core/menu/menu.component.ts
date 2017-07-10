@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { LoginService } from '../../login/login.service';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { LoginService } from '../../login/login.service';
+import { Category } from '../../entity/model';
 
 @Component({
   selector: 'mc-menu',
@@ -8,6 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
+
+  @Input() categories: Category[];
 
   constructor(
     private loginService: LoginService,

@@ -14,5 +14,5 @@ export function handleError (error: Response | any, router: Router) {
   }
   console.error('UNEXPECTED', errMsg);
   router.navigate(['/error'], { skipLocationChange: true });
-  return Observable.empty() as Observable<any>;
+  return Observable.empty() as Observable<never>;
 }

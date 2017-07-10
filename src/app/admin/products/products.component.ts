@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel, NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+
+import { Category, Product } from '../../entity/model';
 
 @Component({
   selector: 'mc-products',
@@ -7,9 +11,46 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductsComponent implements OnInit {
 
-  constructor() { }
+  category: Category;
+
+  categories: Category[];
+
+  newProduct = new Product();
+
+  @ViewChild('productForm') form: NgForm;
+
+  @ViewChild('categoryList') categoryList: NgModel;
+  @ViewChild('name') name: NgModel;
+  @ViewChild('color') color: NgModel;
+  @ViewChild('price') price: NgModel;
+
+  colors = [
+    'Aquamarine', 'Black', 'Blue', 'BlueViolet', 'Brown', 'Chocolate',
+    'Coral', 'Crimson', 'Cyan', 'DarkCyan', 'DarkGreen', 'DarkOrange',
+    'DarkRed', 'DarkViolet', 'DeepPink', 'Fuchsia', 'Gold', 'Green',
+    'HotPink', 'Indigo', 'LimeGreen', 'Orange', 'Red', 'Salmon',
+    'Turquoise', 'Violet', 'Yellow',
+  ];
+
+  constructor(
+    private route: ActivatedRoute,
+  ) {
+    // empty
+  }
 
   ngOnInit() {
+    this.route.data.subscribe(data => {
+      this.category = data.category;
+      this.categories = data.categories;
+      this.newProduct.categoryId = this.category.id;
+    });
+  }
+
+  validationClasses(model: NgModel) {
+    return {
+      'has-success': model.touched && model.valid,
+      'has-danger': model.touched && model.invalid,
+    };
   }
 
 }
