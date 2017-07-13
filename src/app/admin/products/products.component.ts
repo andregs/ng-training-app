@@ -3,6 +3,7 @@ import { NgModel, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { Category, Product } from '../../entity/model';
+import { ProductService } from './product.service';
 
 @Component({
   selector: 'mc-products',
@@ -16,6 +17,8 @@ export class ProductsComponent implements OnInit {
   categories: Category[];
 
   newProduct = new Product();
+
+  @ViewChild('categoryName') categoryName: NgModel;
 
   @ViewChild('productForm') form: NgForm;
 
@@ -34,6 +37,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private service: ProductService,
   ) {
     // empty
   }
@@ -51,6 +55,38 @@ export class ProductsComponent implements OnInit {
       'has-success': model.touched && model.valid,
       'has-danger': model.touched && model.invalid,
     };
+  }
+
+  onCategoryNew() {
+    console.log('TODO new');
+  }
+
+  onCategoryRemove() {
+    this.service.delete(this.category);
+  }
+
+  onSubmit() {
+    console.log(this.price);
+  }
+
+  onInput(e: any) {
+    console.log('input', e);
+  }
+
+  onCategoryNameChange() {
+    if (this.categoryName.valid) {
+      const backup = this.category.name;
+      this.category.name = this.categoryName.value;
+      this.service.save(this.category).subscribe(
+        () => {
+          console.log('Category saved.');
+        },
+        error => {
+          this.category.name = backup;
+          console.error('Unable to save the category:', error);
+        },
+      );
+    }
   }
 
 }

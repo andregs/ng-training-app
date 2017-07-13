@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 import { Deserialize, Serialize } from 'cerialize';
@@ -15,6 +15,7 @@ import { handleError } from '../../core/error/error.function';
 export class ProductService {
 
   readonly endpoint = '/api/categories';
+  readonly categorySaved = new EventEmitter<Category>();
 
   constructor(
     private http: Http,
@@ -63,6 +64,11 @@ export class ProductService {
     return save$.mergeMap(
       res => {
         if ([201, 204].includes(res.status)) {
+          if (res.status === 201) { // created
+            const generatedId = + res.headers!.get('Location')!.split('/').pop()!;
+            category.id = generatedId;
+          }
+          this.categorySaved.emit(category);
           return Observable.of(void 0);
         }
         return Observable.throw(res);
