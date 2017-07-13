@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgModel, NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Category, Product } from '../../entity/model';
 import { ProductService } from './product.service';
@@ -19,11 +19,13 @@ export class ProductsComponent implements OnInit {
   newProduct = new Product();
 
   @ViewChild('categoryName') categoryName: NgModel;
+  @ViewChild('categoryNameField') categoryNameField: ElementRef;
 
   @ViewChild('productForm') form: NgForm;
 
   @ViewChild('categoryList') categoryList: NgModel;
   @ViewChild('name') name: NgModel;
+  @ViewChild('nameField') nameField: ElementRef;
   @ViewChild('color') color: NgModel;
   @ViewChild('price') price: NgModel;
 
@@ -38,6 +40,7 @@ export class ProductsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private service: ProductService,
+    private router: Router,
   ) {
     // empty
   }
@@ -58,11 +61,18 @@ export class ProductsComponent implements OnInit {
   }
 
   onCategoryNew() {
-    console.log('TODO new');
+    this.category = new Category();
+    const catName: HTMLInputElement = this.categoryNameField.nativeElement;
+    catName.focus();
   }
 
   onCategoryRemove() {
-    this.service.delete(this.category);
+    this.service.delete(this.category).subscribe(
+      () => {
+        console.log('Category removed.');
+        this.router.navigate(['admin']);
+      },
+    );
   }
 
   onSubmit() {
@@ -75,15 +85,12 @@ export class ProductsComponent implements OnInit {
 
   onCategoryNameChange() {
     if (this.categoryName.valid) {
-      const backup = this.category.name;
       this.category.name = this.categoryName.value;
       this.service.save(this.category).subscribe(
         () => {
           console.log('Category saved.');
-        },
-        error => {
-          this.category.name = backup;
-          console.error('Unable to save the category:', error);
+          const name: HTMLInputElement = this.nameField.nativeElement;
+          name.focus();
         },
       );
     }

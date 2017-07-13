@@ -8,7 +8,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { Category } from '../../entity/model';
+import { Category, Product } from '../../entity/model';
 import { handleError } from '../../core/error/error.function';
 
 @Injectable()
@@ -16,6 +16,7 @@ export class ProductService {
 
   readonly endpoint = '/api/categories';
   readonly categorySaved = new EventEmitter<Category>();
+  readonly categoryDeleted = new EventEmitter<Category>();
 
   constructor(
     private http: Http,
@@ -47,15 +48,20 @@ export class ProductService {
   delete(category: Category): Observable<void> {
     return this.http.delete(`${this.endpoint}/${category.id}`)
       .mergeMap(res => {
-        if (res.status !== 204) {
-          return Observable.throw(res);
-        }
+        if (res.status !== 204) return Observable.throw(res);
+        this.categoryDeleted.emit(category);
         return Observable.of(void 0);
       })
       .catch(e => handleError(e, this.router));
   }
 
-  save(category: Category): Observable<void> {
+  save(record: Category | Product): Observable<void> {
+    return record instanceof Category
+      ? this.saveCategory(record)
+      : this.saveProduct(record);
+  }
+
+  private saveCategory(category: Category): Observable<void> {
     const body = Serialize(category);
     const save$ = category.id
       ? this.http.put(`${this.endpoint}/${category.id}`, body)
@@ -69,6 +75,27 @@ export class ProductService {
             category.id = generatedId;
           }
           this.categorySaved.emit(category);
+          return Observable.of(void 0);
+        }
+        return Observable.throw(res);
+      })
+      .catch(e => handleError(e, this.router));
+  }
+
+  private saveProduct(product: Product): Observable<void> {
+    const body = Serialize(product);
+    const baseUrl = `${this.endpoint}/${product.categoryId}`;
+    const save$ = product.id
+      ? this.http.put(`${baseUrl}/${product.id}`, body)
+      : this.http.post(baseUrl, body);
+
+    return save$.mergeMap(
+      res => {
+        if ([201, 204].includes(res.status)) {
+          if (res.status === 201) { // created
+            const generatedId = + res.headers!.get('Location')!.split('/').pop()!;
+            product.id = generatedId;
+          }
           return Observable.of(void 0);
         }
         return Observable.throw(res);

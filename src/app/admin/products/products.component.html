@@ -3,7 +3,7 @@
 
 <form class="form-inline mb-4" name="categoryForm" #categoryForm="ngForm" ngNativeValidate>
   <span [ngClass]="validationClasses(categoryName)">
-    <input id="categoryName" name="categoryName" #categoryName="ngModel"
+    <input id="categoryName" name="categoryName" #categoryName="ngModel" #categoryNameField
       type="text" required [maxlength]="256"
       class="form-control mx-1 form-control-danger form-control-success"
       placeholder="Category Name"
@@ -12,11 +12,13 @@
     />
   </span>
   <button type="button"
+    *ngIf="category.id"
     title="New"
     class="btn btn-outline-primary mr-1"
     (click)="onCategoryNew()"
   >➕</button>
   <button type="button"
+    *ngIf="category.id"
     title="Remove"
     class="btn btn-outline-danger"
     (click)="onCategoryRemove()"
@@ -62,7 +64,7 @@
           </select>
         </td>
         <td [ngClass]="validationClasses(name)">
-          <input id="name" name="name" #name="ngModel"
+          <input id="name" name="name" #name="ngModel" #nameField
             type="text" required [maxlength]="256"
             class="form-control form-control-danger form-control-success"
             placeholder="Product Name"
@@ -92,7 +94,11 @@
           />
         </td>
         <td>
-          <button type="submit" title="Add" class="btn btn-primary">Add</button>
+          <button type="submit"
+            title="Add"
+            class="btn btn-primary"
+            [disabled]="productForm.invalid"
+          >Add</button>
         </td>
       </tr>
     </tbody>

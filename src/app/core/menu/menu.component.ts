@@ -25,6 +25,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     this.productService.getCategories().subscribe(this.onCategoriesLoaded);
     this.productService.categorySaved.subscribe(this.onCategorySaved);
+    this.productService.categoryDeleted.subscribe(this.onCategoryDeleted);
   }
 
   get authenticated() {
@@ -54,6 +55,10 @@ export class MenuComponent implements OnInit {
     } else { // it was created
       this.categories.push(saved);
     }
+  }
+
+  onCategoryDeleted = (deleted: Category) => {
+    this.categories = this.categories.filter(c => c.id !== deleted.id);
   }
 
 }
