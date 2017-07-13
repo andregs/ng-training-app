@@ -45,7 +45,7 @@ export class ProductService {
       .catch(e => handleError(e, this.router));
   }
 
-  delete(category: Category): Observable<void> {
+  deleteCategory(category: Category): Observable<void> {
     return this.http.delete(`${this.endpoint}/${category.id}`)
       .mergeMap(res => {
         if (res.status !== 204) return Observable.throw(res);
@@ -55,13 +55,7 @@ export class ProductService {
       .catch(e => handleError(e, this.router));
   }
 
-  save(record: Category | Product): Observable<void> {
-    return record instanceof Category
-      ? this.saveCategory(record)
-      : this.saveProduct(record);
-  }
-
-  private saveCategory(category: Category): Observable<void> {
+  saveCategory(category: Category): Observable<void> {
     const body = Serialize(category);
     const save$ = category.id
       ? this.http.put(`${this.endpoint}/${category.id}`, body)
@@ -82,12 +76,13 @@ export class ProductService {
       .catch(e => handleError(e, this.router));
   }
 
-  private saveProduct(product: Product): Observable<void> {
+  saveProduct(product: Product, category: Category): Observable<void> {
+    product.categoryId = category.id;
     const body = Serialize(product);
-    const baseUrl = `${this.endpoint}/${product.categoryId}`;
+    const endpoint = `${this.endpoint}/${category.id}/products`;
     const save$ = product.id
-      ? this.http.put(`${baseUrl}/${product.id}`, body)
-      : this.http.post(baseUrl, body);
+      ? this.http.put(`${endpoint}/${product.id}`, body)
+      : this.http.post(endpoint, body);
 
     return save$.mergeMap(
       res => {
@@ -96,6 +91,7 @@ export class ProductService {
             const generatedId = + res.headers!.get('Location')!.split('/').pop()!;
             product.id = generatedId;
           }
+          category.add(product);
           return Observable.of(void 0);
         }
         return Observable.throw(res);

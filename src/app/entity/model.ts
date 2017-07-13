@@ -54,6 +54,14 @@ export class Category {
   constructor(data?: Partial<Category>) {
     Object.assign(this, data);
   }
+
+  add(product: Product) {
+    product.categoryId = this.id;
+    const found = this.products.find(p => p.id === product.id);
+    if (! found) {
+      this.products.push(product);
+    }
+  }
 }
 
 export class OrderItem {

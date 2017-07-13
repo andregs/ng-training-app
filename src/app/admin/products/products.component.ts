@@ -16,12 +16,12 @@ export class ProductsComponent implements OnInit {
 
   categories: Category[];
 
-  newProduct = new Product();
+  product = new Product();
 
   @ViewChild('categoryName') categoryName: NgModel;
   @ViewChild('categoryNameField') categoryNameField: ElementRef;
 
-  @ViewChild('productForm') form: NgForm;
+  @ViewChild('productForm') productForm: NgForm;
 
   @ViewChild('categoryList') categoryList: NgModel;
   @ViewChild('name') name: NgModel;
@@ -49,7 +49,7 @@ export class ProductsComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.category = data.category;
       this.categories = data.categories;
-      this.newProduct.categoryId = this.category.id;
+      this.product.categoryId = this.category.id;
     });
   }
 
@@ -67,7 +67,7 @@ export class ProductsComponent implements OnInit {
   }
 
   onCategoryRemove() {
-    this.service.delete(this.category).subscribe(
+    this.service.deleteCategory(this.category).subscribe(
       () => {
         console.log('Category removed.');
         this.router.navigate(['admin']);
@@ -76,7 +76,15 @@ export class ProductsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.price);
+    this.service.saveProduct(this.product, this.category).subscribe(
+      () => {
+        console.log('Product saved.');
+        const name: HTMLInputElement = this.nameField.nativeElement;
+        name.focus();
+        this.product = new Product();
+        this.productForm.resetForm();
+      },
+    );
   }
 
   onInput(e: any) {
@@ -86,7 +94,7 @@ export class ProductsComponent implements OnInit {
   onCategoryNameChange() {
     if (this.categoryName.valid) {
       this.category.name = this.categoryName.value;
-      this.service.save(this.category).subscribe(
+      this.service.saveCategory(this.category).subscribe(
         () => {
           console.log('Category saved.');
           const name: HTMLInputElement = this.nameField.nativeElement;

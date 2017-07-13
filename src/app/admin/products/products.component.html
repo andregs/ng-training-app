@@ -40,12 +40,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of category.products">
-        <th class="text-center"> {{ product.id }} </th>
+      <tr *ngFor="let p of category.products">
+        <th class="text-center"> {{ p.id }} </th>
         <td> {{ category.name }} </td>
-        <td> {{ product.name }} </td>
-        <td> {{ product.color }} </td>
-        <td> {{ product.price | currency:'USD':true }} </td>
+        <td> {{ p.name }} </td>
+        <td> {{ p.color }} </td>
+        <td> {{ p.price | currency:'USD':true }} </td>
         <td>
           <button type="button" title="Edit" class="btn btn-outline-primary">✏️</button>
           <button type="button" title="Remove" class="btn btn-outline-danger">❌</button>
@@ -55,10 +55,10 @@
         <th></th>
         <td>
           <select id="category" name="category" #categoryList="ngModel"
-            *ngIf="newProduct.id"
+            *ngIf="product.id"
             required
             class="form-control"
-            [(ngModel)]="newProduct.categoryId"
+            [(ngModel)]="product.categoryId"
           >
             <option *ngFor="let c of categories" [value]="c.id"> {{ c.name }} </option>
           </select>
@@ -68,14 +68,14 @@
             type="text" required [maxlength]="256"
             class="form-control form-control-danger form-control-success"
             placeholder="Product Name"
-            [(ngModel)]="newProduct.name"
+            [(ngModel)]="product.name"
           />
         </td>
         <td [ngClass]="validationClasses(color)">
           <select id="color" name="color" #color="ngModel"
             required
             class="form-control form-control-danger form-control-success"
-            [(ngModel)]="newProduct.color"
+            [(ngModel)]="product.color"
           >
             <option *ngFor="let c of colors" [value]="c"> {{ c }} </option>
           </select>
@@ -87,10 +87,10 @@
             type="number" required
             class="form-control form-control-danger form-control-success"
             placeholder="0.00"
-            [min]="0.1"
+            [min]="0.01"
             [max]="9999.99"
-            [step]="0.1"
-            [(ngModel)]="newProduct.price"
+            [step]="0.01"
+            [(ngModel)]="product.price"
           />
         </td>
         <td>
@@ -108,7 +108,7 @@
 
 <pre>
 Category: {{ { id: category.id, name: category.name } | json }}
-New Product: {{ newProduct | json }}
+Product: {{ product | json }}
 Product Form.valid: {{ productForm.valid | json }}
 Product Form.value: {{ productForm.value | json }}
 Errors - categoryList {{ categoryList?.errors | json }}
