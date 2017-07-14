@@ -16,7 +16,7 @@ export class ProductsComponent implements OnInit {
 
   categories: Category[];
 
-  product = new Product();
+  product: Product;
 
   @ViewChild('categoryName') categoryName: NgModel;
   @ViewChild('categoryNameField') categoryNameField: ElementRef;
@@ -48,6 +48,7 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.category = data.category;
+      this.product = new Product();
       this.categories = data.categories;
       this.product.categoryId = this.category.id;
     });
@@ -55,53 +56,70 @@ export class ProductsComponent implements OnInit {
 
   validationClasses(model: NgModel) {
     return {
-      'has-success': model.touched && model.valid,
-      'has-danger': model.touched && model.invalid,
+      'has-success': model.dirty && model.valid,
+      'has-danger': model.dirty && model.invalid,
     };
   }
 
-  onCategoryNew() {
-    this.category = new Category();
-    const catName: HTMLInputElement = this.categoryNameField.nativeElement;
-    catName.focus();
-  }
-
-  onCategoryRemove() {
-    this.service.deleteCategory(this.category).subscribe(
-      () => {
-        console.log('Category removed.');
-        this.router.navigate(['admin']);
-      },
-    );
-  }
-
-  onSubmit() {
-    this.service.saveProduct(this.product, this.category).subscribe(
-      () => {
-        console.log('Product saved.');
-        const name: HTMLInputElement = this.nameField.nativeElement;
-        name.focus();
-        this.product = new Product();
-        this.productForm.resetForm();
-      },
-    );
-  }
-
-  onInput(e: any) {
-    console.log('input', e);
-  }
-
-  onCategoryNameChange() {
+  onCategorySave() {
     if (this.categoryName.valid) {
       this.category.name = this.categoryName.value;
       this.service.saveCategory(this.category).subscribe(
         () => {
           console.log('Category saved.');
+          this.product.categoryId = this.category.id;
           const name: HTMLInputElement = this.nameField.nativeElement;
           name.focus();
         },
       );
     }
+  }
+
+  onCategoryNew() {
+    this.category = new Category();
+    this.product = new Product();
+    const catName: HTMLInputElement = this.categoryNameField.nativeElement;
+    catName.focus();
+  }
+
+  onCategoryDelete() {
+    this.service.deleteCategory(this.category).subscribe(
+      () => {
+        console.log('Category deleted.');
+        this.router.navigate(['admin']);
+      },
+    );
+  }
+
+  onProductSave() {
+    this.service.saveProduct(this.product).subscribe(
+      () => {
+        console.log('Product saved.');
+        if (this.product.categoryId === this.category.id) {
+          this.category.add(this.product);
+        }
+        const name: HTMLInputElement = this.nameField.nativeElement;
+        this.product = new Product({ categoryId: this.category.id });
+        name.focus();
+        // resetForm clears validation errors.
+        // setTimeout skips 1 tick to avoid "expression has changed after it was checked" error
+        setTimeout(() => this.productForm.resetForm());
+      },
+    );
+  }
+
+  onProductEdit(product: Product) {
+    this.product = product;
+    this.category.remove(product);
+  }
+
+  onProductDelete(product: Product) {
+    this.service.deleteProduct(product).subscribe(
+      () => {
+        console.log('Product deleted.');
+        this.category.remove(product);
+      },
+    );
   }
 
 }

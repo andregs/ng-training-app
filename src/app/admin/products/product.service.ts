@@ -76,10 +76,9 @@ export class ProductService {
       .catch(e => handleError(e, this.router));
   }
 
-  saveProduct(product: Product, category: Category): Observable<void> {
-    product.categoryId = category.id;
+  saveProduct(product: Product): Observable<void> {
     const body = Serialize(product);
-    const endpoint = `${this.endpoint}/${category.id}/products`;
+    const endpoint = `${this.endpoint}/${product.categoryId}/products`;
     const save$ = product.id
       ? this.http.put(`${endpoint}/${product.id}`, body)
       : this.http.post(endpoint, body);
@@ -91,10 +90,19 @@ export class ProductService {
             const generatedId = + res.headers!.get('Location')!.split('/').pop()!;
             product.id = generatedId;
           }
-          category.add(product);
           return Observable.of(void 0);
         }
         return Observable.throw(res);
+      })
+      .catch(e => handleError(e, this.router));
+  }
+
+  deleteProduct(product: Product): Observable<void> {
+    const endpoint = `${this.endpoint}/${product.categoryId}/products`;
+    return this.http.delete(`${endpoint}/${product.id}`)
+      .mergeMap(res => {
+        if (res.status !== 204) return Observable.throw(res);
+        return Observable.of(void 0);
       })
       .catch(e => handleError(e, this.router));
   }

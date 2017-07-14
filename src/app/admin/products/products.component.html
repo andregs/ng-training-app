@@ -8,7 +8,7 @@
       class="form-control mx-1 form-control-danger form-control-success"
       placeholder="Category Name"
       [ngModel]="category.name"
-      (change)="onCategoryNameChange()"
+      (change)="onCategorySave()"
     />
   </span>
   <button type="button"
@@ -19,14 +19,14 @@
   >➕</button>
   <button type="button"
     *ngIf="category.id"
-    title="Remove"
+    title="Delete"
     class="btn btn-outline-danger"
-    (click)="onCategoryRemove()"
+    (click)="onCategoryDelete()"
   >❌</button>
   {{ categoryForm.value | json }} Errors: {{ categoryName.errors | json }}
 </form>
 
-<form name="productForm" #productForm="ngForm" ngNativeValidate (ngSubmit)="onSubmit()">
+<form name="productForm" #productForm="ngForm" ngNativeValidate (ngSubmit)="onProductSave()">
 
   <table class="table table-hover align-center">
     <thead class="thead-default">
@@ -47,8 +47,18 @@
         <td> {{ p.color }} </td>
         <td> {{ p.price | currency:'USD':true }} </td>
         <td>
-          <button type="button" title="Edit" class="btn btn-outline-primary">✏️</button>
-          <button type="button" title="Remove" class="btn btn-outline-danger">❌</button>
+          <span *ngIf="! product.id">
+            <button type="button"
+              title="Edit"
+              class="btn btn-outline-primary"
+              (click)="onProductEdit(p)"
+            >✏️</button>
+            <button type="button"
+              title="Delete"
+              class="btn btn-outline-danger"
+              (click)="onProductDelete(p)"
+            >❌</button>
+          </span>
         </td>
       </tr>
       <tr>
@@ -95,10 +105,10 @@
         </td>
         <td>
           <button type="submit"
-            title="Add"
+            title="Save"
             class="btn btn-primary"
             [disabled]="productForm.invalid"
-          >Add</button>
+          >Save</button>
         </td>
       </tr>
     </tbody>

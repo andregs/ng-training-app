@@ -49,7 +49,7 @@ export class Product {
 export class Category {
   @a id: number;
   @a name: string;
-  @aas(Product) products: Product[];
+  @aas(Product) products: Product[] = [];
 
   constructor(data?: Partial<Category>) {
     Object.assign(this, data);
@@ -61,6 +61,10 @@ export class Category {
     if (! found) {
       this.products.push(product);
     }
+  }
+
+  remove(product: Product) {
+    this.products = this.products.filter(p => p.id !== product.id);
   }
 }
 
@@ -77,7 +81,7 @@ export class OrderItem {
 
 export class Order {
   @a id: number;
-  @aas(OrderItem) items: OrderItem[];
+  @aas(OrderItem) items: OrderItem[] = [];
   @aas(User) customer: User;
   @aas(Date) orderDate: Date;
 
